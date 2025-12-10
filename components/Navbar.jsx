@@ -2,49 +2,45 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, ShoppingBag, Search } from "lucide-react";
+import { Menu, X, ShoppingBag, Search, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
-    const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 50) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
     const navLinks = [
-        { name: "Home", href: "/" },
-        { name: "Shop", href: "/products" },
-        { name: "Our Story", href: "/about" },
-        { name: "Contact", href: "/contact" },
+        { name: "Shop All", href: "/products" },
+        { name: "Best Sellers", href: "/products?filter=best-sellers" },
+        { name: "New Arrivals", href: "/products?filter=new" },
+        { name: "About Us", href: "/about" },
     ];
 
     return (
         <>
-            <nav
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                        ? "bg-white/90 backdrop-blur-md shadow-sm py-4"
-                        : "bg-transparent py-6"
-                    }`}
-            >
-                <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
+            {/* Announcement Bar */}
+            <div className="bg-[#4A7C59] text-white text-[10px] md:text-xs py-2 text-center tracking-wider font-medium uppercase">
+                Free Shipping on Orders Over $50 | 30-Day Returns
+            </div>
+
+            <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+                <div className="container mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
+
+                    {/* Mobile Menu Button */}
+                    <button
+                        className="md:hidden hover:text-[#4A7C59] transition-colors"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        {isMobileMenuOpen ? (
+                            <X className="w-6 h-6 text-[#2A2A2A]" />
+                        ) : (
+                            <Menu className="w-6 h-6 text-[#2A2A2A]" />
+                        )}
+                    </button>
+
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <span
-                            className={`font-serif text-2xl md:text-3xl font-bold tracking-tight transition-colors ${isScrolled ? "text-dark" : "text-dark md:text-dark"
-                                }`}
-                        >
-                            Lumi<span className="text-primary italic">Pure</span>
+                        <span className="font-serif text-2xl font-bold tracking-tight text-[#2A2A2A]">
+                            Lumi<span className="italic font-light text-[#4A7C59]">Pure</span>
                         </span>
                     </Link>
 
@@ -54,8 +50,7 @@ export default function Navbar() {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className={`text-sm font-medium transition-colors hover:text-primary ${isScrolled ? "text-dark" : "text-dark"
-                                    }`}
+                                className="text-sm font-medium text-[#2A2A2A] hover:text-[#4A7C59] transition-colors uppercase tracking-wide text-[11px]"
                             >
                                 {link.name}
                             </Link>
@@ -63,28 +58,22 @@ export default function Navbar() {
                     </div>
 
                     {/* Icons */}
-                    <div className="flex items-center gap-4 text-dark">
-                        <button className="p-2 hover:bg-rose-50 rounded-full transition-colors relative group">
+                    <div className="flex items-center gap-5 text-[#2A2A2A]">
+                        <button className="hover:text-[#4A7C59] transition-colors hidden sm:block">
                             <Search className="w-5 h-5" />
                         </button>
-                        <button className="p-2 hover:bg-rose-50 rounded-full transition-colors relative group">
-                            <ShoppingBag className="w-5 h-5" />
-                            <span className="absolute top-1 right-1 bg-primary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                                0
-                            </span>
+                        <button className="hover:text-[#4A7C59] transition-colors hidden sm:block">
+                            <User className="w-5 h-5" />
                         </button>
-
-                        {/* Mobile Menu Button */}
-                        <button
-                            className="md:hidden p-2 hover:bg-rose-50 rounded-full transition-colors"
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        >
-                            {isMobileMenuOpen ? (
-                                <X className="w-6 h-6" />
-                            ) : (
-                                <Menu className="w-6 h-6" />
-                            )}
-                        </button>
+                        <Link href="/cart" className="hover:text-[#4A7C59] transition-colors relative flex items-center gap-2 group">
+                            <div className="relative">
+                                <ShoppingBag className="w-5 h-5" />
+                                <span className="absolute -top-1 -right-1 bg-[#D48C70] text-white text-[9px] w-3 h-3 rounded-full flex items-center justify-center font-bold">
+                                    2
+                                </span>
+                            </div>
+                            <span className="text-xs font-medium hidden lg:block group-hover:text-[#4A7C59]">$124.00</span>
+                        </Link>
                     </div>
                 </div>
             </nav>
@@ -93,23 +82,26 @@ export default function Navbar() {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.2 }}
-                        className="fixed inset-0 top-[70px] z-40 bg-white md:hidden p-4 shadow-lg border-t border-rose-100"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
                     >
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col p-4">
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.name}
                                     href={link.href}
-                                    className="text-lg font-medium text-dark py-3 border-b border-rose-50 hover:text-primary transition-colors hover:pl-2"
+                                    className="py-3 text-sm font-medium text-[#2A2A2A] border-b border-gray-50 last:border-none hover:text-[#4A7C59]"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     {link.name}
                                 </Link>
                             ))}
+                            <div className="flex items-center gap-4 mt-4 pt-4 border-t border-gray-100 text-[#2A2A2A]">
+                                <span className="text-xs font-bold uppercase">Account</span>
+                                <span className="text-xs font-bold uppercase">Search</span>
+                            </div>
                         </div>
                     </motion.div>
                 )}
