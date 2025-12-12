@@ -10,12 +10,14 @@ import { loginSchema, LoginFormData } from '@/lib/validations';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui';
 import { Input } from '@/components/ui';
+import { GoogleIcon } from '@/components/icons';
 
 export default function LoginPage() {
     const router = useRouter();
     const { login, isLoading } = useAuthStore();
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
     const {
         register,
@@ -33,6 +35,20 @@ export default function LoginPage() {
         } catch (err: unknown) {
             const errorMessage = err instanceof Error ? err.message : 'Invalid email or password';
             setError(errorMessage);
+        }
+    };
+
+    const handleGoogleSignIn = async () => {
+        try {
+            setIsGoogleLoading(true);
+            setError(null);
+            // Redirect to backend Google OAuth endpoint
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+            window.location.href = `${API_URL}/auth/google`;
+        } catch (err) {
+            console.error('Google sign-in error:', err);
+            setError('Failed to sign in with Google. Please try again.');
+            setIsGoogleLoading(false);
         }
     };
 
@@ -63,6 +79,32 @@ export default function LoginPage() {
                             {error}
                         </div>
                     )}
+
+                    {/* Google Sign In */}
+                    <button
+                        onClick={handleGoogleSignIn}
+                        disabled={isGoogleLoading}
+                        className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-[var(--color-gray-200)] rounded-lg font-medium text-[var(--color-gray-700)] hover:bg-[var(--color-gray-50)] hover:border-[var(--color-gray-300)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isGoogleLoading ? (
+                            <Loader2 size={20} className="animate-spin" />
+                        ) : (
+                            <GoogleIcon />
+                        )}
+                        Continue with Google
+                    </button>
+
+                    {/* Divider */}
+                    <div className="relative my-6">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-[var(--color-gray-200)]" />
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-4 bg-white text-[var(--color-gray-500)]">
+                                or sign in with email
+                            </span>
+                        </div>
+                    </div>
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                         {/* Email */}
