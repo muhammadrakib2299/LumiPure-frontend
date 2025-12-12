@@ -65,13 +65,10 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                 `}
                 >
                     {/* Logo */}
-                    <div className="h-16 px-6 flex items-center justify-between border-b border-gray-200 bg-[var(--color-primary)]">
-                        <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                                <span className="text-[var(--color-primary)] font-bold text-sm">LP</span>
-                            </div>
-                            LumiPure
-                        </h1>
+                    <div className="h-24 px-6 flex items-center justify-between border-b ">
+
+                        <h1 className="text-base font-bold text-black">LumiPure</h1>
+
                         <button
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="lg:hidden p-2 text-white hover:bg-white/20 rounded-lg transition-colors"
@@ -140,33 +137,6 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
 
                 {/* Main Content */}
                 <div className="lg:ml-64">
-                    {/* Top Bar */}
-                    <header className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between sticky top-0 z-30 shadow-sm">
-                        <button
-                            onClick={() => setIsMobileMenuOpen(true)}
-                            className="lg:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                        >
-                            <Menu size={24} />
-                        </button>
-                        <div className="flex items-center gap-4">
-                            <div className="hidden sm:block">
-                                <h2 className="text-lg font-semibold text-gray-900">
-                                    Welcome back, {user?.name || 'Admin'}!
-                                </h2>
-                                <p className="text-sm text-gray-500">
-                                    Manage your store from here
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            {typeof window !== 'undefined' && localStorage.getItem('admin_demo_mode') === 'true' && (
-                                <span className="hidden sm:inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
-                                    🧪 Demo Mode
-                                </span>
-                            )}
-                        </div>
-                    </header>
-
                     {/* Page Content */}
                     <main className="p-6 min-h-[calc(100vh-4rem)]">{children}</main>
                 </div>
