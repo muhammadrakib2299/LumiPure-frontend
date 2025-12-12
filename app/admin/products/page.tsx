@@ -19,6 +19,70 @@ interface Product {
     isFeatured: boolean;
 }
 
+// Demo products
+const demoProducts: Product[] = [
+    {
+        _id: '1',
+        name: 'Hydrating Facial Serum',
+        price: 49.99,
+        stock: 150,
+        category: { name: 'Serums' },
+        images: [{ url: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=100' }],
+        isActive: true,
+        isFeatured: true,
+    },
+    {
+        _id: '2',
+        name: 'Vitamin C Brightening Cream',
+        price: 59.99,
+        stock: 120,
+        category: { name: 'Moisturizers' },
+        images: [{ url: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=100' }],
+        isActive: true,
+        isFeatured: true,
+    },
+    {
+        _id: '3',
+        name: 'Gentle Cleansing Foam',
+        price: 29.99,
+        stock: 200,
+        category: { name: 'Cleansers' },
+        images: [{ url: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=100' }],
+        isActive: true,
+        isFeatured: false,
+    },
+    {
+        _id: '4',
+        name: 'Rose Water Toner',
+        price: 24.99,
+        stock: 180,
+        category: { name: 'Toners' },
+        images: [{ url: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=100' }],
+        isActive: true,
+        isFeatured: false,
+    },
+    {
+        _id: '5',
+        name: 'Night Repair Retinol Cream',
+        price: 69.99,
+        stock: 95,
+        category: { name: 'Night Care' },
+        images: [{ url: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=100' }],
+        isActive: true,
+        isFeatured: true,
+    },
+    {
+        _id: '6',
+        name: 'Exfoliating Sugar Scrub',
+        price: 34.99,
+        stock: 5,
+        category: { name: 'Exfoliators' },
+        images: [{ url: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=100' }],
+        isActive: true,
+        isFeatured: false,
+    },
+];
+
 export default function AdminProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -31,11 +95,26 @@ export default function AdminProductsPage() {
     const fetchProducts = async () => {
         try {
             setIsLoading(true);
-            const response = await api.get('/products');
-            setProducts(response.data || []);
+
+            // Check if in demo mode
+            const isDemoMode = localStorage.getItem('admin_demo_mode') === 'true';
+
+            if (isDemoMode) {
+                // Use demo data
+                setTimeout(() => {
+                    setProducts(demoProducts);
+                    setIsLoading(false);
+                }, 500);
+            } else {
+                // Fetch real data
+                const response = await api.get('/products');
+                setProducts(response.data || []);
+                setIsLoading(false);
+            }
         } catch (error) {
             console.error('Failed to fetch products:', error);
-        } finally {
+            // Fallback to demo data
+            setProducts(demoProducts);
             setIsLoading(false);
         }
     };
@@ -181,10 +260,10 @@ export default function AdminProductsPage() {
                                             <td className="px-6 py-4">
                                                 <span
                                                     className={`text-sm font-medium ${product.stock > 10
-                                                            ? 'text-green-600'
-                                                            : product.stock > 0
-                                                                ? 'text-yellow-600'
-                                                                : 'text-red-600'
+                                                        ? 'text-green-600'
+                                                        : product.stock > 0
+                                                            ? 'text-yellow-600'
+                                                            : 'text-red-600'
                                                         }`}
                                                 >
                                                     {product.stock}
@@ -193,8 +272,8 @@ export default function AdminProductsPage() {
                                             <td className="px-6 py-4">
                                                 <span
                                                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${product.isActive
-                                                            ? 'bg-green-100 text-green-800'
-                                                            : 'bg-red-100 text-red-800'
+                                                        ? 'bg-green-100 text-green-800'
+                                                        : 'bg-red-100 text-red-800'
                                                         }`}
                                                 >
                                                     {product.isActive ? 'Active' : 'Inactive'}

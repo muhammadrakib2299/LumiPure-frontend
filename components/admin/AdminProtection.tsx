@@ -1,16 +1,37 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { Loader2 } from 'lucide-react';
 
 export function AdminProtection({ children }: { children: React.ReactNode }) {
     const router = useRouter();
-    const { user, isAuthenticated } = useAuthStore();
+    const { user, isAuthenticated, setUser } = useAuthStore();
+    const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
-        // Check if user is authenticated and is admin
+        // Check for demo mode
+        const isDemoMode = localStorage.getItem('admin_demo_mode') === 'true';
+
+        if (isDemoMode) {
+            // Set demo admin user
+            if (!user || user.role !== 'admin') {
+                setUser(
+                    {
+                        id: 'demo-admin',
+                        name: 'Demo Admin',
+                        email: 'demo@lumipure.com',
+                        role: 'admin',
+                    },
+                    'demo-token'
+                );
+            }
+            setIsChecking(false);
+            return;
+        }
+
+        // Normal auth check
         if (!isAuthenticated) {
             router.push('/admin/login');
             return;
@@ -20,10 +41,12 @@ export function AdminProtection({ children }: { children: React.ReactNode }) {
             router.push('/admin/login');
             return;
         }
-    }, [isAuthenticated, user, router]);
+
+        setIsChecking(false);
+    }, [isAuthenticated, user, router, setUser]);
 
     // Show loading while checking
-    if (!isAuthenticated || user?.role !== 'admin') {
+    if (isChecking) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">

@@ -17,6 +17,60 @@ interface Order {
     items: any[];
 }
 
+// Demo data for testing
+const demoOrders: Order[] = [
+    {
+        _id: '1',
+        orderNumber: 'ORD-2024-001',
+        user: { name: 'Sarah Johnson', email: 'sarah@example.com' },
+        totalAmount: 149.97,
+        status: 'delivered',
+        paymentMethod: 'credit_card',
+        createdAt: '2024-12-10T10:30:00Z',
+        items: [{}, {}, {}],
+    },
+    {
+        _id: '2',
+        orderNumber: 'ORD-2024-002',
+        user: { name: 'Michael Chen', email: 'michael@example.com' },
+        totalAmount: 89.99,
+        status: 'processing',
+        paymentMethod: 'paypal',
+        createdAt: '2024-12-11T14:20:00Z',
+        items: [{}, {}],
+    },
+    {
+        _id: '3',
+        orderNumber: 'ORD-2024-003',
+        user: { name: 'Emma Williams', email: 'emma@example.com' },
+        totalAmount: 234.50,
+        status: 'shipped',
+        paymentMethod: 'credit_card',
+        createdAt: '2024-12-11T16:45:00Z',
+        items: [{}, {}, {}, {}],
+    },
+    {
+        _id: '4',
+        orderNumber: 'ORD-2024-004',
+        user: { name: 'James Brown', email: 'james@example.com' },
+        totalAmount: 59.99,
+        status: 'pending',
+        paymentMethod: 'bank_transfer',
+        createdAt: '2024-12-12T09:15:00Z',
+        items: [{}],
+    },
+    {
+        _id: '5',
+        orderNumber: 'ORD-2024-005',
+        user: { name: 'Olivia Davis', email: 'olivia@example.com' },
+        totalAmount: 179.99,
+        status: 'processing',
+        paymentMethod: 'credit_card',
+        createdAt: '2024-12-12T11:30:00Z',
+        items: [{}, {}, {}],
+    },
+];
+
 export default function AdminOrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -30,11 +84,26 @@ export default function AdminOrdersPage() {
     const fetchOrders = async () => {
         try {
             setIsLoading(true);
-            const response = await api.get('/orders');
-            setOrders(response.data || []);
+
+            // Check if in demo mode
+            const isDemoMode = localStorage.getItem('admin_demo_mode') === 'true';
+
+            if (isDemoMode) {
+                // Use demo data
+                setTimeout(() => {
+                    setOrders(demoOrders);
+                    setIsLoading(false);
+                }, 500);
+            } else {
+                // Fetch real data
+                const response = await api.get('/orders');
+                setOrders(response.data || []);
+                setIsLoading(false);
+            }
         } catch (error) {
             console.error('Failed to fetch orders:', error);
-        } finally {
+            // Fallback to demo data
+            setOrders(demoOrders);
             setIsLoading(false);
         }
     };

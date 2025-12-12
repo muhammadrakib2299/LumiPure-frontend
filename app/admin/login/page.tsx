@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, Mail, AlertCircle, Loader2 } from 'lucide-react';
+import { Lock, Mail, AlertCircle, Loader2, TestTube } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { Button, Input } from '@/components/ui';
 
@@ -14,7 +14,26 @@ export default function AdminLoginPage() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    const { login, user } = useAuthStore();
+    const { login, setUser } = useAuthStore();
+
+    const handleDemoLogin = () => {
+        // Set demo mode
+        localStorage.setItem('admin_demo_mode', 'true');
+
+        // Set demo admin user
+        setUser(
+            {
+                id: 'demo-admin',
+                name: 'Demo Admin',
+                email: 'demo@lumipure.com',
+                role: 'admin',
+            },
+            'demo-token'
+        );
+
+        // Redirect to admin dashboard
+        router.push('/admin');
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,6 +51,9 @@ export default function AdminLoginPage() {
                 setIsLoading(false);
                 return;
             }
+
+            // Clear demo mode
+            localStorage.removeItem('admin_demo_mode');
 
             // Redirect to admin dashboard
             router.push('/admin');
@@ -153,19 +175,44 @@ export default function AdminLoginPage() {
                                 'Sign In to Dashboard'
                             )}
                         </Button>
+
+                        {/* Divider */}
+                        <div className="relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t border-white/20"></div>
+                            </div>
+                            <div className="relative flex justify-center text-sm">
+                                <span className="px-2 bg-transparent text-gray-400">OR</span>
+                            </div>
+                        </div>
+
+                        {/* Demo Mode Button */}
+                        <button
+                            type="button"
+                            onClick={handleDemoLogin}
+                            className="
+                                w-full flex items-center justify-center gap-2 px-4 py-3
+                                bg-blue-500/20 border-2 border-blue-400/50 rounded-lg
+                                text-blue-200 hover:bg-blue-500/30 hover:border-blue-400
+                                transition-all font-medium
+                            "
+                        >
+                            <TestTube size={20} />
+                            Enter Demo Mode (No Database Required)
+                        </button>
                     </form>
 
-                    {/* Demo Credentials (Remove in production) */}
+                    {/* Demo Mode Info */}
                     <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
                         <p className="text-xs text-blue-200 mb-2 font-medium">
-                            🔑 Demo Admin Credentials:
+                            🧪 Demo Mode Features:
                         </p>
-                        <p className="text-xs text-blue-300 font-mono">
-                            Email: admin@lumipure.com
-                        </p>
-                        <p className="text-xs text-blue-300 font-mono">
-                            Password: admin123
-                        </p>
+                        <ul className="text-xs text-blue-300 space-y-1 ml-4 list-disc">
+                            <li>Access all admin pages</li>
+                            <li>View UI and features</li>
+                            <li>No database required</li>
+                            <li>Perfect for testing interface</li>
+                        </ul>
                     </div>
                 </div>
 
