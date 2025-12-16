@@ -7,6 +7,7 @@ import api from '@/lib/api';
 import { Button, Modal } from '@/components/ui';
 import Link from 'next/link';
 import Image from 'next/image';
+import { toast } from 'react-hot-toast';
 
 interface Product {
     _id: string;
@@ -134,9 +135,19 @@ export default function AdminProductsPage() {
             setProducts(products.filter((p) => p._id !== productToDelete));
             setIsDeleteModalOpen(false);
             setProductToDelete(null);
-        } catch (error) {
+            toast.success('Product deleted successfully');
+        } catch (error: any) {
             console.error('Failed to delete product:', error);
-            alert('Failed to delete product');
+            // Handle different error formats from the unwrapped api interceptor
+            let errorMessage = 'Failed to delete product';
+            if (typeof error === 'string') {
+                errorMessage = error;
+            } else if (error?.message) {
+                errorMessage = error.message;
+            } else if (error?.error) {
+                errorMessage = error.error;
+            }
+            toast.error(errorMessage);
         }
     };
 

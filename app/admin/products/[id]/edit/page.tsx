@@ -7,6 +7,7 @@ import { ArrowLeft, Upload } from 'lucide-react';
 import { Button } from '@/components/ui';
 import api from '@/lib/api';
 import Link from 'next/link';
+import { toast } from 'react-hot-toast';
 
 export default function EditProductPage() {
     const router = useRouter();
@@ -72,10 +73,20 @@ export default function EditProductPage() {
             };
 
             await api.put(`/products/${id}`, payload);
+            toast.success('Product updated successfully');
             router.push('/admin/products');
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to update product:', error);
-            alert('Failed to update product');
+            // Handle different error formats from the unwrapped api interceptor
+            let errorMessage = 'Failed to update product';
+            if (typeof error === 'string') {
+                errorMessage = error;
+            } else if (error?.message) {
+                errorMessage = error.message;
+            } else if (error?.error) {
+                errorMessage = error.error;
+            }
+            toast.error(errorMessage);
         } finally {
             setIsLoading(false);
         }

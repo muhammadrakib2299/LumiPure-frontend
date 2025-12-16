@@ -7,6 +7,7 @@ import { ArrowLeft, Upload } from 'lucide-react';
 import { Button } from '@/components/ui';
 import api from '@/lib/api';
 import Link from 'next/link';
+import { toast } from 'react-hot-toast';
 
 export default function NewProductPage() {
     const router = useRouter();
@@ -29,24 +30,51 @@ export default function NewProductPage() {
         setIsLoading(true);
 
         try {
+            // Validate required fields
+            if (!formData.name || !formData.price || !formData.stock) {
+                toast.error('Please fill in all required fields');
+                setIsLoading(false);
+                return;
+            }
+
+            // Validate numbers
+            const price = parseFloat(formData.price);
+            const stock = parseInt(formData.stock);
+
+            if (isNaN(price) || isNaN(stock)) {
+                toast.error('Price and Stock must be valid numbers');
+                setIsLoading(false);
+                return;
+            }
+
             // Convert numbers
             const payload = {
                 ...formData,
-                price: parseFloat(formData.price),
+                price,
                 comparePrice: formData.comparePrice ? parseFloat(formData.comparePrice) : undefined,
-                stock: parseInt(formData.stock),
-                // Handle images: currently not implementing file upload logic here, assuming user puts URL or we need to handle it.
-                // The form doesn't have image input yet, just a placeholder div.
-                // Assuming backend creates basic product structure.
+                stock,
                 images: [],
                 isActive: true
             };
 
-            await api.post('/products', payload);
-            router.push('/admin/products');
-        } catch (error) {
+            const response = await api.post('/products', payload);
+
+            if (response) {
+                toast.success('Product created successfully');
+                router.push('/admin/products');
+            }
+        } catch (error: any) {
             console.error('Failed to create product:', error);
-            alert('Failed to create product');
+            // Handle different error formats from the unwrapped api interceptor
+            let errorMessage = 'Failed to create product';
+            if (typeof error === 'string') {
+                errorMessage = error;
+            } else if (error?.message) {
+                errorMessage = error.message;
+            } else if (error?.error) {
+                errorMessage = error.error;
+            }
+            toast.error(errorMessage);
         } finally {
             setIsLoading(false);
         }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
+import { Toaster } from 'react-hot-toast';
 import { ConditionalLayout } from '@/components/layout/ConditionalLayout';
 
 const inter = Inter({
@@ -45,6 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
+        <Toaster position="top-center" />
         <ConditionalLayout>{children}</ConditionalLayout>
       </body>
     </html>
