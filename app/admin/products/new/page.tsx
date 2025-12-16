@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AdminLayout } from '@/components/admin/AdminLayout';
-import { ArrowLeft, Upload, Plus, X } from 'lucide-react';
+import { ArrowLeft, Upload } from 'lucide-react';
 import { Button } from '@/components/ui';
+import api from '@/lib/api';
 import Link from 'next/link';
 
 export default function NewProductPage() {
@@ -21,10 +22,34 @@ export default function NewProductPage() {
         tags: '',
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert('Demo Mode: Product creation requires database connection');
-        // In real mode, this would call: await api.post('/products', formData)
+        setIsLoading(true);
+
+        try {
+            // Convert numbers
+            const payload = {
+                ...formData,
+                price: parseFloat(formData.price),
+                comparePrice: formData.comparePrice ? parseFloat(formData.comparePrice) : undefined,
+                stock: parseInt(formData.stock),
+                // Handle images: currently not implementing file upload logic here, assuming user puts URL or we need to handle it.
+                // The form doesn't have image input yet, just a placeholder div.
+                // Assuming backend creates basic product structure.
+                images: [],
+                isActive: true
+            };
+
+            await api.post('/products', payload);
+            router.push('/admin/products');
+        } catch (error) {
+            console.error('Failed to create product:', error);
+            alert('Failed to create product');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -234,8 +259,8 @@ export default function NewProductPage() {
 
                         {/* Actions */}
                         <div className="space-y-3">
-                            <Button type="submit" fullWidth>
-                                Create Product
+                            <Button type="submit" fullWidth disabled={isLoading}>
+                                {isLoading ? 'Creating...' : 'Create Product'}
                             </Button>
                             <Link href="/admin/products">
                                 <Button type="button" variant="outline" fullWidth>

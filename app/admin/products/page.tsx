@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { Plus, Search, Edit, Trash2, Eye } from 'lucide-react';
 import api from '@/lib/api';
-import { Button } from '@/components/ui';
+import { Button, Modal } from '@/components/ui';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -87,6 +87,8 @@ export default function AdminProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [productToDelete, setProductToDelete] = useState<string | null>(null);
 
     useEffect(() => {
         fetchProducts();
@@ -119,12 +121,19 @@ export default function AdminProductsPage() {
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this product?')) return;
+    const handleDeleteClick = (id: string) => {
+        setProductToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!productToDelete) return;
 
         try {
-            await api.delete(`/products/${id}`);
-            setProducts(products.filter((p) => p._id !== id));
+            await api.delete(`/products/${productToDelete}`);
+            setProducts(products.filter((p) => p._id !== productToDelete));
+            setIsDeleteModalOpen(false);
+            setProductToDelete(null);
         } catch (error) {
             console.error('Failed to delete product:', error);
             alert('Failed to delete product');
@@ -297,7 +306,7 @@ export default function AdminProductsPage() {
                                                         <Edit size={18} />
                                                     </Link>
                                                     <button
-                                                        onClick={() => handleDelete(product._id)}
+                                                        onClick={() => handleDeleteClick(product._id)}
                                                         className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                                         title="Delete"
                                                     >
@@ -320,6 +329,31 @@ export default function AdminProductsPage() {
                     </div>
                 )}
             </div>
+            <Modal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Delete Product"
+            >
+                <div className="space-y-4">
+                    <p className="text-gray-600">
+                        Are you sure you want to delete this product? This action cannot be undone.
+                    </p>
+                    <div className="flex justify-end gap-3">
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsDeleteModalOpen(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                            onClick={handleConfirmDelete}
+                        >
+                            Delete Product
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
         </AdminLayout>
     );
 }
