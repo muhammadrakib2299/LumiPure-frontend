@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { X, User, LogOut, ShoppingBag, Heart } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
@@ -23,6 +23,11 @@ const navLinks = [
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     const menuRef = useRef<HTMLDivElement>(null);
     const { user, isAuthenticated, logout } = useAuthStore();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Close on escape key
     useEffect(() => {
@@ -124,7 +129,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
                 {/* User Section */}
                 <div className="border-t border-[var(--color-gray-200)] p-4">
-                    {isAuthenticated && user ? (
+                    {mounted && isAuthenticated && user ? (
                         <div className="space-y-3">
                             <div className="flex items-center gap-3 px-2 py-2">
                                 <div className="w-10 h-10 rounded-full bg-[var(--color-primary-light)] flex items-center justify-center">

@@ -21,6 +21,11 @@ export function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { isAuthenticated } = useAuthStore();
     const { items } = useCartStore();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const cartItemCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -111,7 +116,7 @@ export function Navbar() {
                 "
                             >
                                 <ShoppingCart size={20} />
-                                {cartItemCount > 0 && (
+                                {mounted && cartItemCount > 0 && (
                                     <span
                                         className="
                       absolute -top-0.5 -right-0.5
@@ -127,7 +132,7 @@ export function Navbar() {
 
                             {/* Account */}
                             <Link
-                                href={isAuthenticated ? '/account' : '/login'}
+                                href={mounted && isAuthenticated ? '/account' : '/login'}
                                 className="
                   p-2
                   text-[var(--color-gray-600)] hover:text-[var(--color-primary)]
