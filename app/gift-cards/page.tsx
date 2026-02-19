@@ -1,9 +1,9 @@
 export default function GiftCardsPage() {
     return (
-        <div className="min-h-screen bg-[var(--color-bg)] py-20">
+        <div className="min-h-screen bg-[var(--background)] py-20">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto text-center">
-                    <h1 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-text)] mb-6">
+                    <h1 className="text-4xl md:text-5xl font-display font-bold text-[var(--foreground)] mb-6">
                         Gift Cards
                     </h1>
                     <p className="text-lg text-[var(--color-gray-600)] mb-8">

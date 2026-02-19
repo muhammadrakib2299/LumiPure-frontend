@@ -1,9 +1,9 @@
 export default function ReturnsPage() {
     return (
-        <div className="min-h-screen bg-[var(--color-bg)] py-20">
+        <div className="min-h-screen bg-[var(--background)] py-20">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto">
-                    <h1 className="text-4xl md:text-5xl font-display font-bold text-[var(--color-text)] mb-6 text-center">
+                    <h1 className="text-4xl md:text-5xl font-display font-bold text-[var(--foreground)] mb-6 text-center">
                         Returns & Exchanges
                     </h1>
                     <p className="text-lg text-[var(--color-gray-600)] mb-12 text-center">

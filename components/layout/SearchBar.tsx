@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 
 interface SearchBarProps {
@@ -16,11 +17,18 @@ export function SearchBar({
 }: SearchBarProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState('');
+    const router = useRouter();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (query.trim() && onSearch) {
-            onSearch(query.trim());
+        if (query.trim()) {
+            if (onSearch) {
+                onSearch(query.trim());
+            } else {
+                router.push(`/shop?search=${encodeURIComponent(query.trim())}`);
+            }
+            setIsOpen(false);
+            setQuery('');
         }
     };
 
