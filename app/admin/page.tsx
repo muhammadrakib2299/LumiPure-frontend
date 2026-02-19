@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import {
     TrendingUp,
@@ -11,7 +12,6 @@ import {
     ArrowUp,
     ArrowDown,
 } from 'lucide-react';
-import api from '@/lib/api';
 
 interface Stats {
     totalRevenue: number;
@@ -151,7 +151,7 @@ export default function AdminDashboardPage() {
                         Quick Actions
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <a
+                        <Link
                             href="/admin/products/new"
                             className="
                                 flex items-center gap-3 p-4 rounded-lg border-2 border-dashed
@@ -166,8 +166,8 @@ export default function AdminDashboardPage() {
                                     Create a new product
                                 </p>
                             </div>
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                             href="/admin/orders"
                             className="
                                 flex items-center gap-3 p-4 rounded-lg border-2 border-dashed
@@ -182,8 +182,8 @@ export default function AdminDashboardPage() {
                                     Manage customer orders
                                 </p>
                             </div>
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                             href="/admin/categories"
                             className="
                                 flex items-center gap-3 p-4 rounded-lg border-2 border-dashed
@@ -200,7 +200,7 @@ export default function AdminDashboardPage() {
                                     Organize your products
                                 </p>
                             </div>
-                        </a>
+                        </Link>
                     </div>
                 </div>
 

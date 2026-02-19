@@ -39,19 +39,7 @@ export function AdminProtection({ children }: { children: React.ReactNode }) {
 
             // Check if user is authenticated
             if (!isAuthenticated) {
-                // Auto-enable demo mode for testing
-                console.log('No authentication found - enabling demo mode');
-                localStorage.setItem('admin_demo_mode', 'true');
-                setUser(
-                    {
-                        id: 'demo-admin',
-                        name: 'Demo Admin',
-                        email: 'demo@lumipure.com',
-                        role: 'admin',
-                    },
-                    'demo-token'
-                );
-                setIsChecking(false);
+                router.push('/admin/login');
                 return;
             }
 

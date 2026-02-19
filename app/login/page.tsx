@@ -144,12 +144,12 @@ export default function LoginPage() {
 
                         {/* Forgot Password */}
                         <div className="flex justify-end">
-                            <Link
-                                href="/forgot-password"
-                                className="text-sm text-[var(--color-primary)] hover:underline"
+                            <span
+                                className="text-sm text-[var(--color-gray-400)] cursor-not-allowed"
+                                title="Coming soon"
                             >
                                 Forgot password?
-                            </Link>
+                            </span>
                         </div>
 
                         {/* Submit Button */}

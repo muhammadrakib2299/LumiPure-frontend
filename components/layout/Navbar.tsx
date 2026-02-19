@@ -65,7 +65,7 @@ export function Navbar() {
                             </button>
 
                             {/* Logo */}
-                            <Logo variant={isScrolled ? 'dark' : 'dark'} size="md" />
+                            <Logo variant="dark" size="md" />
                         </div>
 
                         {/* Center: Navigation Links (Desktop) */}
@@ -80,7 +80,7 @@ export function Navbar() {
                     hover:text-[var(--color-primary)]
                     ${isScrolled
                                             ? 'text-[var(--color-gray-700)]'
-                                            : 'text-[var(--color-gray-700)]'
+                                            : 'text-[var(--color-gray-600)]'
                                         }
                   `}
                                 >
@@ -132,7 +132,7 @@ export function Navbar() {
 
                             {/* Account */}
                             <Link
-                                href={mounted && isAuthenticated ? '/account' : '/login'}
+                                href={mounted && isAuthenticated ? '/profile' : '/login'}
                                 className="
                   p-2
                   text-[var(--color-gray-600)] hover:text-[var(--color-primary)]

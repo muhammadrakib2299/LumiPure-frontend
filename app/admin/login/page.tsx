@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail, AlertCircle, Loader2, TestTube } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
@@ -57,8 +58,9 @@ export default function AdminLoginPage() {
 
             // Redirect to admin dashboard
             router.push('/admin');
-        } catch (err: any) {
-            setError(err?.response?.data?.message || 'Invalid email or password');
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Invalid email or password';
+            setError(message);
         } finally {
             setIsLoading(false);
         }
@@ -218,12 +220,12 @@ export default function AdminLoginPage() {
 
                 {/* Footer */}
                 <div className="text-center mt-6">
-                    <a
+                    <Link
                         href="/"
                         className="text-sm text-gray-400 hover:text-white transition-colors"
                     >
                         ← Back to Main Site
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

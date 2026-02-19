@@ -85,7 +85,7 @@ export default function CheckoutPage() {
     const tax = subtotal * taxRate;
     const total = subtotal + shippingCost + tax;
 
-    const onSubmit = async (data: Record<string, unknown>) => {
+    const onSubmit = async (data: Record<string, string | boolean | undefined>) => {
         try {
             setIsSubmitting(true);
             setOrderError(null);
@@ -108,7 +108,7 @@ export default function CheckoutPage() {
             };
 
             const response = await api.post('/orders', orderData);
-            const order = response.data;
+            const order = response.data?.order || response.data;
 
             // Clear cart after successful order
             await clearCart();
@@ -318,34 +318,14 @@ export default function CheckoutPage() {
                                         </label>
                                     </div>
 
-                                    {/* Card Details */}
+                                    {/* Card Details - Stripe integration placeholder */}
                                     {paymentMethod === 'card' && (
-                                        <div className="mt-6 p-4 bg-[var(--color-gray-50)] rounded-xl space-y-4">
-                                            <Input
-                                                {...register('cardName')}
-                                                label="Name on Card"
-                                                placeholder="John Doe"
-                                                fullWidth
-                                            />
-                                            <Input
-                                                {...register('cardNumber')}
-                                                label="Card Number"
-                                                placeholder="4242 4242 4242 4242"
-                                                fullWidth
-                                            />
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <Input
-                                                    {...register('cardExpiry')}
-                                                    label="Expiry Date"
-                                                    placeholder="MM/YY"
-                                                    fullWidth
-                                                />
-                                                <Input
-                                                    {...register('cardCvc')}
-                                                    label="CVC"
-                                                    placeholder="123"
-                                                    fullWidth
-                                                />
+                                        <div className="mt-6 p-4 bg-[var(--color-gray-50)] rounded-xl">
+                                            <div className="flex items-center gap-2 text-[var(--color-gray-500)]">
+                                                <Lock size={16} />
+                                                <p className="text-sm">
+                                                    Card payment will be processed securely. You will be charged after placing the order.
+                                                </p>
                                             </div>
                                         </div>
                                     )}

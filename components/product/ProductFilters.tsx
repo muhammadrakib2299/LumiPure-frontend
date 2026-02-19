@@ -205,7 +205,7 @@ export function ProductFiltersComponent({
                 <div className="sticky top-28 bg-white rounded-2xl p-6 shadow-sm">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="font-semibold text-lg text-[var(--color-gray-900)]">Filters</h2>
-                        <span className="text-sm text-[var(--color-gray-500))]">{totalProducts} products</span>
+                        <span className="text-sm text-[var(--color-gray-500)]">{totalProducts} products</span>
                     </div>
                     <FilterContent />
                 </div>
