@@ -27,9 +27,22 @@ interface CartState {
     clearCart: () => Promise<void>;
 }
 
+// Helper: the axios interceptor already returns response.data,
+// so the resolved value is { success, message, data: { cart } }.
+// This helper extracts the cart object safely.
+function extractCart(response: unknown): { items: CartItem[]; totalItems: number; totalPrice: number } {
+    const res = response as { data?: { cart?: { items?: CartItem[]; totalItems?: number; totalPrice?: number } } };
+    const cart = res?.data?.cart;
+    return {
+        items: cart?.items || [],
+        totalItems: cart?.totalItems || 0,
+        totalPrice: cart?.totalPrice || 0,
+    };
+}
+
 export const useCartStore = create<CartState>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             items: [],
             totalItems: 0,
             totalPrice: 0,
@@ -39,14 +52,8 @@ export const useCartStore = create<CartState>()(
                 try {
                     set({ isLoading: true });
                     const response = await api.get('/cart');
-                    const cart = response.data;
-
-                    set({
-                        items: cart.items || [],
-                        totalItems: cart.totalItems || 0,
-                        totalPrice: cart.totalPrice || 0,
-                        isLoading: false,
-                    });
+                    const cart = extractCart(response);
+                    set({ ...cart, isLoading: false });
                 } catch (error) {
                     set({ isLoading: false });
                     console.error('Error fetching cart:', error);
@@ -61,15 +68,8 @@ export const useCartStore = create<CartState>()(
                         quantity,
                         selectedVariant,
                     });
-
-                    const cart = response.data;
-
-                    set({
-                        items: cart.items || [],
-                        totalItems: cart.totalItems || 0,
-                        totalPrice: cart.totalPrice || 0,
-                        isLoading: false,
-                    });
+                    const cart = extractCart(response);
+                    set({ ...cart, isLoading: false });
                 } catch (error) {
                     set({ isLoading: false });
                     throw error;
@@ -80,15 +80,8 @@ export const useCartStore = create<CartState>()(
                 try {
                     set({ isLoading: true });
                     const response = await api.put(`/cart/items/${productId}`, { quantity });
-
-                    const cart = response.data;
-
-                    set({
-                        items: cart.items || [],
-                        totalItems: cart.totalItems || 0,
-                        totalPrice: cart.totalPrice || 0,
-                        isLoading: false,
-                    });
+                    const cart = extractCart(response);
+                    set({ ...cart, isLoading: false });
                 } catch (error) {
                     set({ isLoading: false });
                     throw error;
@@ -99,15 +92,8 @@ export const useCartStore = create<CartState>()(
                 try {
                     set({ isLoading: true });
                     const response = await api.delete(`/cart/items/${productId}`);
-
-                    const cart = response.data;
-
-                    set({
-                        items: cart.items || [],
-                        totalItems: cart.totalItems || 0,
-                        totalPrice: cart.totalPrice || 0,
-                        isLoading: false,
-                    });
+                    const cart = extractCart(response);
+                    set({ ...cart, isLoading: false });
                 } catch (error) {
                     set({ isLoading: false });
                     throw error;
@@ -118,7 +104,6 @@ export const useCartStore = create<CartState>()(
                 try {
                     set({ isLoading: true });
                     await api.delete('/cart');
-
                     set({
                         items: [],
                         totalItems: 0,

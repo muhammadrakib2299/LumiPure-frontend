@@ -7,6 +7,8 @@ import { ShoppingCart, Heart, Star, Eye } from 'lucide-react';
 import { Product } from '@/types';
 import { Button } from '@/components/ui';
 import { useCartStore } from '@/store/cartStore';
+import { useWishlistStore } from '@/store/wishlistStore';
+import toast from 'react-hot-toast';
 
 interface ProductCardProps {
     product: Product;
@@ -14,8 +16,9 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
     const [isHovered, setIsHovered] = useState(false);
-    const [isWishlisted, setIsWishlisted] = useState(false);
     const { addToCart } = useCartStore();
+    const { toggleWishlist, isWishlisted } = useWishlistStore();
+    const wishlisted = isWishlisted(product._id);
 
     const categoryName =
         typeof product.category === 'object' ? product.category.name : '';
@@ -30,15 +33,21 @@ export function ProductCard({ product }: ProductCardProps) {
         e.stopPropagation();
         try {
             await addToCart(product._id, 1);
-        } catch (error) {
-            console.error('Failed to add to cart:', error);
+            toast.success(`${product.name} added to cart`);
+        } catch {
+            toast.error('Failed to add to cart. Please login first.');
         }
     };
 
     const handleWishlist = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        setIsWishlisted(!isWishlisted);
+        toggleWishlist(product._id);
+        if (wishlisted) {
+            toast('Removed from wishlist', { icon: '💔' });
+        } else {
+            toast.success('Added to wishlist');
+        }
     };
 
     return (
@@ -60,15 +69,15 @@ export function ProductCard({ product }: ProductCardProps) {
                 <button
                     onClick={handleWishlist}
                     className={`
-            absolute top-3 right-3 z-10 p-2 rounded-full
-            transition-all duration-200
-            ${isWishlisted
+                        absolute top-3 right-3 z-10 p-2 rounded-full
+                        transition-all duration-200
+                        ${wishlisted
                             ? 'bg-[var(--color-accent)] text-white'
                             : 'bg-white/80 text-[var(--color-gray-600)] hover:bg-white hover:text-[var(--color-accent)]'
                         }
-          `}
+                    `}
                 >
-                    <Heart size={18} fill={isWishlisted ? 'currentColor' : 'none'} />
+                    <Heart size={18} fill={wishlisted ? 'currentColor' : 'none'} />
                 </button>
 
                 {/* Product Image */}
@@ -91,10 +100,10 @@ export function ProductCard({ product }: ProductCardProps) {
                 {/* Quick Actions Overlay */}
                 <div
                     className={`
-            absolute inset-0 bg-black/20 flex items-center justify-center gap-3
-            transition-opacity duration-300
-            ${isHovered ? 'opacity-100' : 'opacity-0'}
-          `}
+                        absolute inset-0 bg-black/20 flex items-center justify-center gap-3
+                        transition-opacity duration-300
+                        ${isHovered ? 'opacity-100' : 'opacity-0'}
+                    `}
                 >
                     <button
                         onClick={handleAddToCart}
