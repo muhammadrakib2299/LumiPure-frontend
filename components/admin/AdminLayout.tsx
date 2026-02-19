@@ -13,12 +13,14 @@ import {
     Menu,
     X,
     Tag,
+    Image as ImageIcon,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { AdminProtection } from './AdminProtection';
 
 const sidebarLinks = [
     { href: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
+    { href: '/admin/hero', icon: ImageIcon, label: 'Hero Slides' },
     { href: '/admin/products', icon: Package, label: 'Products' },
     { href: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
     { href: '/admin/categories', icon: Tag, label: 'Categories' },
