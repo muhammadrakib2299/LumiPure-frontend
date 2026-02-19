@@ -103,13 +103,16 @@ export function ProductCard({ product }: ProductCardProps) {
                     >
                         <ShoppingCart size={20} />
                     </button>
-                    <Link
-                        href={`/products/${product._id}`}
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }}
                         className="p-3 bg-white rounded-full text-[var(--color-gray-800)] hover:bg-[var(--color-primary)] hover:text-white transition-colors shadow-lg"
                         title="Quick View"
                     >
                         <Eye size={20} />
-                    </Link>
+                    </button>
                 </div>
             </Link>
 

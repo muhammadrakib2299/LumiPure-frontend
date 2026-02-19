@@ -43,25 +43,25 @@ export function Navbar() {
         <>
             <header
                 className={`
-          fixed top-0 left-0 right-0 z-40
-          transition-all duration-300
-          ${isScrolled
-                        ? 'bg-white/95 backdrop-blur-md shadow-md py-3'
-                        : 'bg-transparent py-5'
+                    fixed top-0 left-0 right-0 z-40
+                    transition-all duration-300
+                    ${isScrolled
+                        ? 'bg-white/95 backdrop-blur-md shadow-sm py-2.5'
+                        : 'bg-white py-4'
                     }
-        `}
+                `}
             >
-                <div className="container mx-auto px-4 lg:px-8">
-                    <div className="flex items-center justify-between">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between gap-4">
                         {/* Left: Hamburger (Mobile) + Logo */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3 flex-shrink-0">
                             {/* Mobile Menu Toggle */}
                             <button
                                 onClick={() => setIsMobileMenuOpen(true)}
-                                className="lg:hidden p-2 text-[var(--color-gray-600)] hover:text-[var(--color-primary)] transition-colors"
+                                className="lg:hidden p-2 -ml-2 text-[var(--color-gray-600)] hover:text-[var(--color-primary)] transition-colors"
                                 aria-label="Open menu"
                             >
-                                <Menu size={24} />
+                                <Menu size={22} />
                             </button>
 
                             {/* Logo */}
@@ -69,20 +69,12 @@ export function Navbar() {
                         </div>
 
                         {/* Center: Navigation Links (Desktop) */}
-                        <nav className="hidden lg:flex items-center gap-8">
+                        <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`
-                    text-sm font-medium uppercase tracking-wide
-                    transition-colors duration-200
-                    hover:text-[var(--color-primary)]
-                    ${isScrolled
-                                            ? 'text-[var(--color-gray-700)]'
-                                            : 'text-[var(--color-gray-600)]'
-                                        }
-                  `}
+                                    className="text-sm font-medium uppercase tracking-wide transition-colors duration-200 hover:text-[var(--color-primary)] text-[var(--color-gray-700)]"
                                 >
                                     {link.label}
                                 </Link>
@@ -90,18 +82,14 @@ export function Navbar() {
                         </nav>
 
                         {/* Right: Search, Wishlist, Cart, Account */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2">
                             {/* Search */}
                             <SearchBar className="hidden sm:block" />
 
                             {/* Wishlist */}
                             <Link
                                 href="/wishlist"
-                                className="
-                  hidden sm:flex p-2
-                  text-[var(--color-gray-600)] hover:text-[var(--color-primary)]
-                  transition-colors
-                "
+                                className="hidden sm:flex p-2 text-[var(--color-gray-500)] hover:text-[var(--color-primary)] transition-colors"
                             >
                                 <Heart size={20} />
                             </Link>
@@ -109,22 +97,11 @@ export function Navbar() {
                             {/* Cart */}
                             <Link
                                 href="/cart"
-                                className="
-                  relative p-2
-                  text-[var(--color-gray-600)] hover:text-[var(--color-primary)]
-                  transition-colors
-                "
+                                className="relative p-2 text-[var(--color-gray-500)] hover:text-[var(--color-primary)] transition-colors"
                             >
                                 <ShoppingCart size={20} />
                                 {mounted && cartItemCount > 0 && (
-                                    <span
-                                        className="
-                      absolute -top-0.5 -right-0.5
-                      w-5 h-5 flex items-center justify-center
-                      bg-[var(--color-primary)] text-white
-                      text-xs font-medium rounded-full
-                    "
-                                    >
+                                    <span className="absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center bg-[var(--color-primary)] text-white text-[10px] font-semibold rounded-full">
                                         {cartItemCount > 9 ? '9+' : cartItemCount}
                                     </span>
                                 )}
@@ -133,11 +110,7 @@ export function Navbar() {
                             {/* Account */}
                             <Link
                                 href={mounted && isAuthenticated ? '/profile' : '/login'}
-                                className="
-                  p-2
-                  text-[var(--color-gray-600)] hover:text-[var(--color-primary)]
-                  transition-colors
-                "
+                                className="p-2 text-[var(--color-gray-500)] hover:text-[var(--color-primary)] transition-colors"
                             >
                                 <User size={20} />
                             </Link>

@@ -14,25 +14,25 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
     if (filters.sort) params.append('sort', filters.sort);
 
     const response = await api.get(`/products?${params.toString()}`);
-    return response.data;
+    return response as unknown as ProductsResponse;
 }
 
 // Get single product by ID
 export async function getProduct(id: string): Promise<{ product: Product }> {
     const response = await api.get(`/products/${id}`);
-    return response.data;
+    return response as unknown as { product: Product };
 }
 
 // Get featured products
 export async function getFeaturedProducts(): Promise<{ products: Product[] }> {
     const response = await api.get('/products/featured');
-    return response.data;
+    return response as unknown as { products: Product[] };
 }
 
 // Get all categories
 export async function getCategories(): Promise<{ categories: Category[] }> {
     const response = await api.get('/categories');
-    return response.data;
+    return response as unknown as { categories: Category[] };
 }
 
 // Search products
