@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LumiPure Frontend
 
-## Getting Started
+Next.js storefront and admin panel for LumiPure, a beauty e-commerce platform. It runs against the [LumiPure backend](https://github.com/muhammadrakib2299/LumiPure-backend) REST API.
 
-First, run the development server:
+**Live demo:** https://lumi-pure-frontend.vercel.app
+
+## Features
+
+- Shop page with category, search and price filters and sort options, all kept in the URL query string; product detail pages with an image gallery
+- Customer accounts: register and log in with JWT auth, edit your profile, view your orders
+- Cart stored on the server through the API; checkout with a validated shipping form, card or cash-on-delivery choice, and an order confirmation page
+- Wishlist saved in the browser, managed with Zustand
+- Home page with a hero slider (image or video slides managed from the admin panel), featured products, shop-by-category and testimonials
+- Admin panel (`/admin`) that creates, edits and deletes products and hero slides through the API. The dashboard, orders, customers, categories and settings screens show sample data for now, and a demo mode opens the whole panel without a database.
+
+## Built with
+
+Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Zustand, Axios, React Hook Form + Zod, react-hot-toast, Lucide icons.
+
+## Run locally
+
+Start the [backend](https://github.com/muhammadrakib2299/LumiPure-backend) first. Then create `.env.local` if the API is not at the default address:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_API_URL=http://localhost:5000/api   # default when unset
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+npm install
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open http://localhost:3000. The admin login is at `/admin/login`. The backend's `npm run seed:admin` script creates an admin account.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Other scripts: `npm run build`, `npm run start`, `npm run lint`.
 
-## Learn More
+## Related
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Backend API: https://github.com/muhammadrakib2299/LumiPure-backend

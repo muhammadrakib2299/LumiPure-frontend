@@ -1,6 +1,12 @@
 {
   "name": "lumipure-frontend",
   "version": "0.1.0",
+  "description": "Next.js storefront and admin panel for the LumiPure beauty e-commerce platform.",
+  "author": "Md. Rakib (https://devrakib.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/muhammadrakib2299/LumiPure-frontend.git"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
